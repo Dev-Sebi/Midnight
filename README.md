@@ -53,5 +53,5 @@ This project is licensed under the Apache 2.0 License - see the LICENSE.md file 
 
 ## Acknowledgments
 
-* This bot used Sebis [Discord.JS V13.x Bot Template](https://github.com/Dev-Sebi/discord-bot-template-v13)
-* This bot used **part** of [Vortex's bad Links list](https://github.com/jagrosh/Vortex/blob/master/lists/referral_domains.txt)
+* This bot uses Sebis [Discord.JS V13.x Bot Template](https://github.com/Dev-Sebi/discord-bot-template-v13)
+* This bot uses **part** of [Vortex's bad Links list](https://github.com/jagrosh/Vortex/blob/master/lists/referral_domains.txt)
