@@ -10,7 +10,7 @@ const moment = require('moment');
 
 module.exports = {
     name: "infractions",
-    description: "Shows how many links were deleted by the specified user",
+    description: "Shows how many links were detected by the specified user",
     type: 1,
     options: [
         {
@@ -30,7 +30,10 @@ module.exports = {
     execute: async (client, interaction, args) => {
         
         const userid = await interaction.options._hoistedOptions[0].user.id
-        const user = await interaction.guild.members.fetch(userid)
+        const user = await interaction.guild.members.fetch(userid).catch( (error) => {
+            console.log(error)
+            return interaction.followUp(`${client.emojis.cache.get(emojis.Bot_Emergency).toString()} Something went wrong, please try again!`)
+        })
         con.query(
             {
               sql: `SELECT * FROM ${process.env.DB_DATABASENAME} WHERE id=?`,
