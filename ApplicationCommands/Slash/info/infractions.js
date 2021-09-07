@@ -10,7 +10,7 @@ const moment = require('moment');
 
 module.exports = {
     name: "infractions",
-    description: "Shows how many links were deleted by the specified user",
+    description: "Shows how many links were detected by the specified user",
     type: 1,
     options: [
         {
