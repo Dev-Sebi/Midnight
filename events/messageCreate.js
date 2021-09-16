@@ -11,11 +11,11 @@ const badwords = require("../utils/badwords")
 client.on("messageCreate", async (message) => {
 
     // add database for global users
-
+    const messagectn = message.content.toLowerCase()
 
     for(let i = 0; i <= badlinks.length; i++)
        {
-            if(message.content.includes(badlinks[i]))
+            if(messagectn.includes(badlinks[i]))
             {
                 con.query(
                     {
