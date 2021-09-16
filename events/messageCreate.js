@@ -27,7 +27,6 @@ client.on("messageCreate", async (message) => {
                         if (err) throw err;
                         if (Object.values(result).length == 0)
                         {
-                            console.log("test")
                             con.query(
                                 {
                                     sql: `INSERT INTO ${process.env.DB_DATABASENAME} (id, infractions) VALUES (?, ?)`,
