@@ -1,5 +1,6 @@
 
 module.exports = [
+    'discord-hypesquade.com',
     '100cs.ru',
     '100eshopdeals.com',
     '101nitro.com',
