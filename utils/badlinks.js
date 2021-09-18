@@ -1,5 +1,6 @@
 
 module.exports = [
+    'steamdiscord.com/airdrop',
     'discord-hypesquade.com',
     '100cs.ru',
     '100eshopdeals.com',
