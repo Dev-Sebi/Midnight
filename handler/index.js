@@ -32,9 +32,11 @@ const globPromise = promisify(glob);
         // await client.application.commands.set(ArrayOfApplicationCommands); // if you want to update every guild the server is in (up to 1 hour for the update to complete)
         await client.guilds.cache.get("850690156582273054").commands.set(ArrayOfApplicationCommands); // if you want to update only one guild (instant update)
         console.log("Commands Loaded!")
-        client.user.setActivity(`${client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)} Users`, { type: "WATCHING" }); 
+        const users = new Intl.NumberFormat(format).format(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0))
+        client.user.setActivity(`${users} Users`, { type: "WATCHING" }); 
         setInterval(async() => {
-            client.user.setActivity(`${client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)} Users`, { type: "WATCHING" }); 
+            client.user.setActivity(`${users} Users`, { type: "WATCHING" }); 
         }, 3600000) // 1 hour
     });
+};
 };
