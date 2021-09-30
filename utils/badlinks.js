@@ -1,5 +1,6 @@
 
 module.exports = [
+    'discord-accept.com',
     'discocrdapp.com',
     'steamdiscord.com',
     'discord-hypesquade.com',
