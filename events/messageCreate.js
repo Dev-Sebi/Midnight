@@ -17,7 +17,7 @@ client.on("messageCreate", async (message) => {
        {
             if(messagectn.includes(badlinks[i]))
             {
-                if(badlinks[i] === "undefined") return;
+                if(!badlinks[i]) return;
                 con.query(
                     {
                       sql: `SELECT * FROM ${process.env.DB_DATABASENAME} WHERE id=?`,
