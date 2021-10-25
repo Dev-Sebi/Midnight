@@ -2,6 +2,7 @@
 module.exports = [
     'discordrgift.ru',
     'discond.gift',
+    'discordsgift.com',
     'discorcl.com',
     'discord-cpp.com',
     'discord-accept.com',
