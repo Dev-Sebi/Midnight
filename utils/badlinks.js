@@ -1,5 +1,7 @@
 
 module.exports = [
+    'discorclgift.net.ru',
+    'discordhalloweens.com',
     'dilscord.com',
     'discorde.gift',
     'discordll.gift',
@@ -889,6 +891,7 @@ module.exports = [
     'discrdspp.com',
     'discrocl.xyz',
     'discrod-gift.com',
+    'discrod-gift.xyz',
     'discrod-glfts.com',
     'discrod-nitro.fun',
     'discrod-nitro.info',
