@@ -1,5 +1,7 @@
 
 module.exports = [
+    'kuroshinsaga.xyz',
+    'blasterlegends.com',
     'discorclgift.net.ru',
     'discordhalloweens.com',
     'dilscord.com',
