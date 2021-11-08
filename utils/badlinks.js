@@ -1,5 +1,6 @@
 
 module.exports = [
+    'ruby.mba',
     'kuroshinsaga.xyz',
     'blasterlegends.com',
     'discorclgift.net.ru',
