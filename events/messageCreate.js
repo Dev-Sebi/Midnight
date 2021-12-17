@@ -5,13 +5,22 @@ const con = require("../database/connection");
 const emojis = require("../utils/emojis.js");
 const { glob } = require("glob");
 const { promisify } = require("util");
-const badlinks = require("../utils/badlinks")
-const badwords = require("../utils/badwords")
+
 
 client.on("messageCreate", async (message) => {
 
-    // add database for global users
+    // message all in lowercase
     const messagectn = message.content.toLowerCase()
+
+    let regex = /(https?:\/\/[^\s]+)/g;
+
+    messagectn.match(regex)
+
+
+return;
+
+
+
 
     for(let i = 0; i <= badlinks.length; i++)
        {

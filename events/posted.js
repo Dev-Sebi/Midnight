@@ -10,7 +10,7 @@ const api = new Topgg.Api(process.env.TOPGGTOKEN)
 const ap = AutoPoster(process.env.TOPGGTOKEN, client)
 const { glob } = require("glob");
 const { promisify } = require("util");
-const badwords = require("../utils/badwords")
+
 
 ap.on('posted', () => {
     console.log('Posted stats to Top.gg!')

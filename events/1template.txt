@@ -5,7 +5,7 @@ const con = require("../database/connection");
 const emojis = require("../utils/emojis.js");
 const { glob } = require("glob");
 const { promisify } = require("util");
-const badwords = require("../utils/badwords")
+
 
 client.on("", async () => {
 
