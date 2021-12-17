@@ -10,8 +10,9 @@ const api = new Topgg.Api(process.env.TOPGGTOKEN)
 const ap = AutoPoster(process.env.TOPGGTOKEN, client)
 const { glob } = require("glob");
 const { promisify } = require("util");
-const badwords = require("../utils/badwords")
+
 
 client.on("guildDelete", async guild => {
+    if(!guild) return;
     console.log(`Left ${guild.name} [Members:${guild.memberCount}] (${client.user.username} is now in ${client.guilds.cache.size} Servers!)`)
 })
