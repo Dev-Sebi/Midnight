@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const client = require("../bot.js");
 const con = require("../database/connection");
 const emojis = require("../utils/emojis.js");
+const colors = require("../utils/colors.js");
 const { glob } = require("glob");
 const { promisify } = require("util");
 const axios = require('axios');
@@ -18,7 +19,6 @@ client.on("messageCreate", async (message) => {
     let links = messagectn.match(regex)
 
     if(!links) return;
-
     links.forEach(hit => {
 
         hit = hit.replace(/(^\w+:|^)\/\//, '');
@@ -69,7 +69,37 @@ client.on("messageCreate", async (message) => {
                                 });
                             }
                         })
-                    return message.delete()
+                    message.delete().catch((err) => {})
+                    con.query(
+                        {
+                          sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
+                          timeout: 10000, // 10s
+                          values: [message.guild.id],
+                        },
+                        async function (err, result, fields) {
+                            if (err) throw err;
+                            if (Object.values(result).length == 0)
+                            {
+                                //nothing
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    const channel = await message.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${message.author} posted one or more malicious links! \n\n ${links.toString().replace(",", "\n")}`)
+                                        .setTimestamp()
+                                    return channel.send({ embeds: [embed]}).catch((err) => {});
+                                }
+                                catch(err)
+                                {
+                                    console.log(err)
+                                    //Nothing
+                                }
+                            }
+                        })
                 }
             })
             .catch(error => {

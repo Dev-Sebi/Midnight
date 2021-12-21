@@ -3,6 +3,7 @@ const { glob } = require("glob");
 const { promisify } = require("util");
 const { Client } = require("discord.js");
 const globPromise = promisify(glob);
+const con = require("../database/connection");
 
 /**
  * @param {Client} client
@@ -32,6 +33,29 @@ const globPromise = promisify(glob);
         // await client.application.commands.set(ArrayOfApplicationCommands); // if you want to update every guild the server is in (up to 1 hour for the update to complete)
         await client.guilds.cache.get("850690156582273054").commands.set(ArrayOfApplicationCommands); // if you want to update only one guild (instant update)
         console.log("Commands Loaded!")
+
+        try 
+        {
+            client.guilds.cache.forEach(async guild => 
+            {
+                con.query(
+                {
+                    sql: `INSERT INTO ${process.env.DB_DATABASEGUILDS} (id) VALUES (?)`,
+                    timeout: 10000, // 10s
+                    values: [guild.id],
+                },
+                    async function (err) {
+                        if (err) { return };
+                        console.log("added " + guild.name)
+                    }
+                );
+            });
+        } 
+        catch(e)
+        {
+            //nothing
+        }
+
         const users = new Intl.NumberFormat(`de`).format(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0))
         client.user.setActivity(`${users} Users`, { type: "WATCHING" }); 
         setInterval(async() => {

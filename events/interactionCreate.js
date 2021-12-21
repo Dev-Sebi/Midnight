@@ -10,7 +10,6 @@ const { promisify } = require("util");
 client.on("interactionCreate", async (interaction) => {
     try
     {
-        await interaction.deferReply().catch(() => {});
         const cmd = client.ArrayOfApplicationCommands.get(interaction.commandName);
         if (!cmd)
             return interaction.followUp({ content: "An error has occured " });
