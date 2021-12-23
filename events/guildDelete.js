@@ -14,5 +14,22 @@ const { promisify } = require("util");
 
 client.on("guildDelete", async guild => {
     if(!guild) return;
-    console.log(`Left ${guild.name} [Members:${guild.memberCount}] (${client.user.username} is now in ${client.guilds.cache.size} Servers!)`)
-})
+    try
+    {  
+      con.query(
+        {
+            sql: `DELETE FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
+            timeout: 10000, // 10s
+            values: [guild.id],
+        },
+          async function (err) {
+            if (err) throw err;
+          }
+        );
+        console.log(`Left ${guild.name} [Members:${guild.memberCount}] (${client.user.username} is now in ${client.guilds.cache.size} Servers!)`)
+    }
+    catch(error)
+    {
+        console.log("Error in /events/guildDelete.js")
+    }
+  })
