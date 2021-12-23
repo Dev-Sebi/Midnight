@@ -12,6 +12,7 @@ var url = "https://phish.sinking.yachts/v2/check";
 
 client.on("messageCreate", async (message) => {
 
+    if(message.system) return;
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
 
@@ -22,6 +23,7 @@ client.on("messageCreate", async (message) => {
     links.forEach(hit => {
 
         hit = hit.replace(/(^\w+:|^)\/\//, '');
+        hit = hit.split('/')[0];
         axios.get(`${url}/${hit}`, {
             headers: {
                 "X-Identity": "Sebi - Midnight",
