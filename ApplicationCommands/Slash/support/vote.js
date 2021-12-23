@@ -38,6 +38,6 @@ module.exports = {
 
     const row = new Discord.MessageActionRow().addComponents(button);
 
-    interaction.followUp({embeds: [embed], components: [row]})
+    interaction.reply({embeds: [embed], components: [row]})
   },
 };

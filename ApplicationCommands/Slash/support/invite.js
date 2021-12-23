@@ -36,6 +36,6 @@ module.exports = {
       
         let row = new Discord.MessageActionRow().addComponents(button, button2);
       
-        interaction.followUp({content: "Here is my Invite:", components: [row]});
+        interaction.reply({content: "Here is my Invite:", components: [row]});
     },
 };
