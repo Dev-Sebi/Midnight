@@ -32,7 +32,7 @@ module.exports = {
         const userid = await interaction.options._hoistedOptions[0].user.id
         const user = await interaction.guild.members.fetch(userid).catch( (error) => {
             console.log(error)
-            return interaction.followUp(`${client.emojis.cache.get(emojis.Bot_Emergency).toString()} Something went wrong, please try again!`)
+            return interaction.reply(`${client.emojis.cache.get(emojis.Bot_Emergency).toString()} Something went wrong, please try again!`)
         })
         con.query(
             {
@@ -48,7 +48,7 @@ module.exports = {
                         .setColor(colors.Green)
                         .setDescription(`${client.emojis.cache.get(emojis.IconBadgeStaff).toString()} ${user.user.username} has **0** global infractions`)
 
-                    return interaction.followUp({embeds: [embed]})
+                    return interaction.reply({embeds: [embed]})
                 }
                 else
                 {
@@ -56,7 +56,7 @@ module.exports = {
                         .setColor(colors.Blurple)
                         .setDescription(`${client.emojis.cache.get(emojis.IconBadgeStaff).toString()} ${user.user.username} has **${result[0].infractions}** global infractions`)
 
-                    return interaction.followUp({embeds: [embed]})
+                    return interaction.reply({embeds: [embed]})
                 }
             }
         )

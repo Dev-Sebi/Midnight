@@ -46,7 +46,7 @@ module.exports = {
             )
             .setTimestamp()
             .setFooter("• Made with heart by Sebi");
-        interaction.followUp({ embeds: [embed]});
+        interaction.reply({ embeds: [embed]});
         return;
     },
 };

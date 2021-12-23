@@ -44,7 +44,7 @@ module.exports = {
 
           let row = new Discord.MessageActionRow().addComponents(button, button2);
 
-          await interaction.followUp({embeds: [embed], components: [row]}).catch((error) => {
+          await interaction.reply({embeds: [embed], components: [row]}).catch((error) => {
             console.log(error)
             return;
           })      

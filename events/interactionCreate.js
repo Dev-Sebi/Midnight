@@ -12,7 +12,7 @@ client.on("interactionCreate", async (interaction) => {
     {
         const cmd = client.ArrayOfApplicationCommands.get(interaction.commandName);
         if (!cmd)
-            return interaction.followUp({ content: "An error has occured " });
+            return interaction.reply({ content: "An error has occured " });
         const args = [];
         for (let option of interaction.options.data) {
             if (option.type === "SUB_COMMAND") {
