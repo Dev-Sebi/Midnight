@@ -2,7 +2,7 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const client = require("../bot.js");
 const con = require("../database/connection");
-const emojis = require("../utils/emojis.js");
+
 const colors = require("../utils/colors.js");
 const { glob } = require("glob");
 const { promisify } = require("util");
