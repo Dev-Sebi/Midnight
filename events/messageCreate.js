@@ -93,7 +93,7 @@ client.on("messageCreate", async (message) => {
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${message.author} posted one or more malicious links! \n\n ${links.toString().replace(",", "\n")}`)
                                         .setTimestamp()
-                                    return channel.send({ embeds: [embed]}).catch((err) => {});
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
                                 }
                                 catch(err)
                                 {
