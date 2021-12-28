@@ -88,7 +88,7 @@ client.on("messageCreate", async (message) => {
                                         let timeout = result[0].punishment
                                         if(timeout == "60s")
                                         {
-                                            member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { console.log(err) })
+                                            member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { })
                                         }
             
                                         else if(timeout == "5min")
