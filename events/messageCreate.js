@@ -2,7 +2,7 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const client = require("../bot.js");
 const con = require("../database/connection");
-
+const emojis = require("../utils/emojis.js");
 const colors = require("../utils/colors.js");
 const { glob } = require("glob");
 const { promisify } = require("util");
@@ -15,7 +15,7 @@ client.on("messageCreate", async (message) => {
     if(message.system) return;
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
-
+    let member = message.member
     let regex = /(https?:\/\/[^\s]+)/g;
     let links = messagectn.match(regex)
 
@@ -70,8 +70,56 @@ client.on("messageCreate", async (message) => {
                                         if (err) throw err;
                                 });
                             }
+
+                            con.query(
+                                {
+                                  sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
+                                  timeout: 10000, // 10s
+                                  values: [message.guild.id],
+                                },
+                                async function (err, result, fields) {
+                                    if (err) throw err;
+                                    if (Object.values(result).length == 0)
+                                    {
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        let timeout = result[0].punishment
+                                        if(timeout == "60s")
+                                        {
+                                            member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { console.log(err) })
+                                        }
+            
+                                        else if(timeout == "5min")
+                                        {
+                                            member.timeout(5 * 60 * 1000, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { })
+                                        }
+            
+                                        else if(timeout == "10min")
+                                        {
+                                            member.timeout(10 * 60 * 1000, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { })
+                                        }
+            
+                                        else if(timeout == "1h")
+                                        {
+                                            member.timeout(60 * 60 * 1000, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { })
+                                        }
+            
+                                        else if(timeout == "1d")
+                                        {
+                                            member.timeout(60 * 60 * 1000 * 24, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { })
+                                        }
+            
+                                        else if(timeout == "1w")
+                                        {
+                                            member.timeout(60 * 60 * 1000 * 24 * 7, 'Midnight Auto Moderation - Phish Link Detected').catch((err) => { })
+                                        }
+                                        message.delete().catch((err) => { })
+                                    }
+                                })
                         })
-                    message.delete().catch((err) => {})
+
                     con.query(
                         {
                           sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
@@ -91,7 +139,7 @@ client.on("messageCreate", async (message) => {
                                     const channel = await message.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${message.author} posted one or more malicious links! \n\n ${links.toString().replace(",", "\n")}`)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${message.author} posted one or more malicious links! \n\n ||${links.toString().replace(",", "\n")}||`)
                                         .setTimestamp()
                                     return channel?.send({ embeds: [embed]}).catch((err) => {});
                                 }
