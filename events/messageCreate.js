@@ -34,7 +34,15 @@ client.on("messageCreate", async (message) => {
            })
             .then(response => {
                 let scam = response.data
-                logging.send(hit + " " + scam + "Sent fom " + message.guild.id)
+                const embed = new Discord.MessageEmbed()
+                    .setColor(scam ? colors.Red : colors.Green)
+                    .setDescription(`
+                    Link: ${"`" + hit + "`"}
+                    Scam: ${"`" + scam + "`"}\n
+                    `)
+                    .setFooter(`Sent from: ${message.guild.name} (ID: ${message.guild.id})`)
+                    .setTimestamp()
+                logging.send({ embeds: [embed]});
                 if(!scam)
                 {
                     return;
