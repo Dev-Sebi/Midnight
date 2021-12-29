@@ -13,11 +13,14 @@ var url = "https://phish.sinking.yachts/v2/check";
 client.on("messageCreate", async (message) => {
 
     if(message.system) return;
+    if (!message.guild.me.permissions.has('MANAGE_MESSAGES') || !message.guild.me.permissions.has('ADMINISTRATOR')) return;
+  
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
     let member = message.member
     let regex = /(https?:\/\/[^\s]+)/g;
     let links = messagectn.match(regex)
+    let logging = await message.guild.channels.cache.find(ch => ch.id === "925655493416988674")
 
     if(!links) return;
     links.forEach(hit => {
@@ -31,8 +34,10 @@ client.on("messageCreate", async (message) => {
            })
             .then(response => {
                 let scam = response.data
+                logging.send(hit + " " + scam)
                 if(!scam)
                 {
+                    return;
                     //nothing, search for other links
                 }
                 else
