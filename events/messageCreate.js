@@ -34,7 +34,7 @@ client.on("messageCreate", async (message) => {
            })
             .then(response => {
                 let scam = response.data
-                logging.send(hit + " " + scam ("Sent fom " + message.guild.id))
+                logging.send(hit + " " + scam + "Sent fom " + message.guild.id)
                 if(!scam)
                 {
                     return;
