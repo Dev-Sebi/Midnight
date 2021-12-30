@@ -13,7 +13,7 @@ var url = "https://phish.sinking.yachts/v2/check";
 client.on("messageCreate", async (message) => {
 
     if(message.system) return;
-    if (!message.guild.me.permissions.has('MANAGE_MESSAGES') || !message.guild.me.permissions.has('ADMINISTRATOR')) return;
+    if (!message.guild.me.permissions.has('MANAGE_MESSAGES')) return;
   
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
