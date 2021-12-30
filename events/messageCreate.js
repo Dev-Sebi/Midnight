@@ -14,7 +14,7 @@ client.on("messageCreate", async (message) => {
 
     if(message.system) return;
     if (!message.guild.me.permissions.has('MANAGE_MESSAGES')) return;
-  
+    
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
     let member = message.member
@@ -25,9 +25,9 @@ client.on("messageCreate", async (message) => {
 
     if(!links) return;
     links.forEach(hit => {
-
-        hit = hit.replace(/(^\w+:|^)\/\//, '');
-        hit = hit.split('/')[0];
+        hit = hit.replace(/(^\w+:|^)\/\//, '').split('/')[0].toLowerCase();
+        let protected = ["discord.com", "discord.gg", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "youtube.com"]
+        if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
             headers: {
                 "X-Identity": "Sebi - Midnight",
