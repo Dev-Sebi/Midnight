@@ -26,7 +26,7 @@ client.on("messageCreate", async (message) => {
     if(!links) return;
     links.forEach(hit => {
         hit = hit.replace(/(^\w+:|^)\/\//, '').split('/')[0].toLowerCase();
-        let protected = ["discord.com", "discord.gg", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "youtube.com"]
+        let protected = ["discord.com", "discord.gg", "media.discordapp.net", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "youtube.com", "youtu.be"]
         if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
             headers: {
