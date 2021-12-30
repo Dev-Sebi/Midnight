@@ -20,7 +20,8 @@ client.on("messageCreate", async (message) => {
     let member = message.member
     let regex = /(https?:\/\/[^\s]+)/g;
     let links = messagectn.match(regex)
-    let logging = await message.guild.channels.cache.find(ch => ch.id === "925655493416988674")
+    let guild = await client.guilds.cache.find(g => g.id === "850690156582273054") // Bot Testing Server
+    let logging = await guild.channels.cache.find(ch => ch.id === "925655493416988674") // Bot Logging Channel
 
     if(!links) return;
     links.forEach(hit => {
