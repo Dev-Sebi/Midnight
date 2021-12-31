@@ -17,16 +17,16 @@ client.on("messageCreate", async (message) => {
     
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
-    let member = message.member
-    let regex = /(https?:\/\/[^\s]+)/g;
-    let links = messagectn.match(regex)
-    let guild = await client.guilds.cache.find(g => g.id === "850690156582273054") // Bot Testing Server
-    let logging = await guild.channels.cache.find(ch => ch.id === "925655493416988674") // Bot Logging Channel
+    const member = message.member
+    const regex = /(https?:\/\/[^\s]+)/g;
+    const links = messagectn.match(regex)
+    const guild = await client.guilds.cache.find(g => g.id === "850690156582273054") // Bot Testing Server
+    const logging = await guild.channels.cache.find(ch => ch.id === "925655493416988674") // Bot Logging Channel
+    const protected = ["www.twitch.tv", "discord.com", "discord.gg", "media.discordapp.net", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "www.youtube.com", "youtu.be"]
 
     if(!links) return;
     links.forEach(hit => {
         hit = hit.replace(/(^\w+:|^)\/\//, '').split('/')[0].toLowerCase();
-        let protected = ["discord.com", "discord.gg", "media.discordapp.net", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "youtube.com", "youtu.be"]
         if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
             headers: {
