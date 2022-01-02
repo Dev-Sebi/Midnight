@@ -27,7 +27,7 @@ async function getPotentialScammersID()
                                       values: [id, "true"],
                                     },
                                     async function (err, result, fields) {
-                                        if (err) throw err;
+                                        if (err) return;
                                         if (Object.values(result).length == 0)
                                         {
                                             return console.log(`Unable to add ${id} to DB!`);

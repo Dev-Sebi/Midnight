@@ -2,7 +2,6 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const client = require("../bot.js");
 const con = require("../database/connection");
-
 const { glob } = require("glob");
 const { promisify } = require("util");
 
