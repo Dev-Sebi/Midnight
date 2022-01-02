@@ -39,7 +39,7 @@ client.on("guildMemberAdd", async (member) => {
                         {
                             return;
                         }
-                        else
+                        else if(result[0].id === member.id && result[0].flag_scammer === "true")
                         {
                             try
                             {
@@ -61,6 +61,10 @@ client.on("guildMemberAdd", async (member) => {
                                 console.log(err)
                                 //Nothing
                             }
+                        }
+                        else
+                        {
+                            return;
                         }
                     })
             }
