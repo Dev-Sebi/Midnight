@@ -83,11 +83,10 @@ module.exports = async (client) => {
             //nothing
         }
 
-        const users = new Intl.NumberFormat(`de`).format(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0))
-        client.user.setActivity(`${users} Users`, { type: "WATCHING" });
+        client.user.setActivity(`for Scams`, { type: "WATCHING" });
         await getPotentialScammersID()
         setInterval(async() => {
-            client.user.setActivity(`${users} Users`, { type: "WATCHING" });
+            client.user.setActivity(`for Scams`, { type: "WATCHING" });
             await getPotentialScammersID()
         }, 3600000) // 1 hour
     });
