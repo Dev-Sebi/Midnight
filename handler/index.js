@@ -52,7 +52,6 @@ module.exports = async (client) => {
         ArrayOfApplicationCommands.push(file);
     });
 
-
     client.on("ready", async (client) => {
         console.log(`Logged in as ${client.user.tag}!`);
         console.log(`Currently in ${client.guilds.cache.size} ${client.guilds.cache.size == 1 ? "Server" : "Servers"}`);
