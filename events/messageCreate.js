@@ -8,7 +8,7 @@ const { glob } = require("glob");
 const { promisify } = require("util");
 const axios = require('axios');
 
-var url = "https://phish.sinking.yachts/v2/check";
+var url = process.env.PhishLink;
 
 client.on("messageCreate", async (message) => {
 
@@ -30,7 +30,7 @@ client.on("messageCreate", async (message) => {
         if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
             headers: {
-                "X-Identity": "Sebi - Midnight",
+                "X-Identity": process.env.PhishIdendity,
             }
            })
             .then(response => {

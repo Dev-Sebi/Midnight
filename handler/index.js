@@ -4,12 +4,40 @@ const { promisify } = require("util");
 const { Client } = require("discord.js");
 const globPromise = promisify(glob);
 const con = require("../database/connection");
+const axios = require('axios');
 
 /**
  * @param {Client} client
  */
 
- module.exports = async (client) => {
+async function getPotentialScammersID()
+{
+    const ids = await axios.get(process.env.FroskyLink, {
+                        headers: {
+                                "Authorization": process.env.FroskyAuth,
+                            }
+                        })
+                        .then(response => {
+                            const scamids = response.data.data
+                            scamids.forEach(id => {
+                                con.query(
+                                    {
+                                      sql: `INSERT INTO ${process.env.DB_DATABASENAME} (id, flag_scammer) VALUES (?, ?)`,
+                                      timeout: 10000, // 10s
+                                      values: [id, "true"],
+                                    },
+                                    async function (err, result, fields) {
+                                        if (err) throw err;
+                                        if (Object.values(result).length == 0)
+                                        {
+                                            return console.log(`Unable to add ${id} to DB!`);
+                                        }
+                                    })
+                            });
+                        })
+}
+
+module.exports = async (client) => {
 
     const eventFiles = await globPromise(`${process.cwd()}/events/*.js`);
     eventFiles.map((value) => require(value));
@@ -57,9 +85,11 @@ const con = require("../database/connection");
         }
 
         const users = new Intl.NumberFormat(`de`).format(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0))
-        client.user.setActivity(`${users} Users`, { type: "WATCHING" }); 
+        client.user.setActivity(`${users} Users`, { type: "WATCHING" });
+        await getPotentialScammersID()
         setInterval(async() => {
-            client.user.setActivity(`${users} Users`, { type: "WATCHING" }); 
+            client.user.setActivity(`${users} Users`, { type: "WATCHING" });
+            await getPotentialScammersID()
         }, 3600000) // 1 hour
     });
 };
