@@ -33,7 +33,7 @@ module.exports = {
           let button = new Discord.MessageButton()
             .setLabel("Invite me!")
             .setStyle("LINK")
-            .setURL(`https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=19327428608&scope=bot%20applications.commands`)
+            .setURL(`https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=1118839056384&scope=bot%20applications.commands`)
             .setEmoji(emojis.IconJoin);
 
           let button2 = new Discord.MessageButton()
