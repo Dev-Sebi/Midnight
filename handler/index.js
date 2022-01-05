@@ -35,7 +35,7 @@ async function getPotentialScammersID()
                         }
                         else
                         {
-                            return console.log(`Added ${user.username} DB!`);
+                            return console.log(`Added ${user.username} to DB!`);
                         }
                     })
             });
