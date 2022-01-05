@@ -47,19 +47,18 @@ client.on("guildMemberAdd", async (member) => {
 
                             const embed = new Discord.MessageEmbed()
                                 .setColor(colors.Red)
-                                .setDescription(`<@${member.id}> (${member.id}) joined ${member.guild}!`)
+                                .setDescription(`${result[0].username} (ID: ${member.id}) joined ${member.guild}!`)
                                 .setTimestamp()
                             logging.send({ embeds: [embed]});
 
                             const embed1 = new Discord.MessageEmbed()
                                 .setColor(colors.Red)
-                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (${member.id}) Is a Potential Scammer or Bad Actor!`)
+                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Is a Potential Scammer or Bad Actor! \n` + "Reason: `" + "Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!" + "`")
                                 .setTimestamp()
                             return channel.send({ embeds: [embed1]}).catch((err) => { console.log (err) });
                         }
                         catch(err)
                         {
-                            console.log(err)
                             // nothing
                         }
                     }
