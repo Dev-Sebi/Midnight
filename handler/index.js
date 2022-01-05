@@ -12,29 +12,39 @@ const axios = require('axios');
 
 async function getPotentialScammersID()
 {
-    const ids = await axios.get(process.env.FroskyLink, {
-                        headers: {
-                                "Authorization": process.env.FroskyAuth,
-                            }
-                        })
-                        .then(response => {
-                            const scamids = response.data.data
-                            scamids.forEach(id => {
-                                con.query(
-                                    {
-                                      sql: `INSERT INTO ${process.env.DB_DATABASENAME} (id, flag_scammer) VALUES (?, ?)`,
-                                      timeout: 10000, // 10s
-                                      values: [id, "true"],
-                                    },
-                                    async function (err, result, fields) {
-                                        if (err) return;
-                                        if (Object.values(result).length == 0)
-                                        {
-                                            return console.log(`Unable to add ${id} to DB!`);
-                                        }
-                                    })
-                            });
-                        })
+    await axios.get(process.env.FroskyLink, {
+        headers: {
+                "Authorization": process.env.FroskyAuth,
+            }
+        })
+        .then(response => {
+            const scamids = response.data
+            const username = response.data.username
+            const discriminator = response.data.discriminator
+            const added = response.data.added
+            const updated = response.data.updated
+            const add_reason = response.data.add_reason
+            scamids.forEach(id => {
+                if(response.data.bot == 1) return
+                con.query(
+                    {
+                      sql: `INSERT INTO ${process.env.DB_DATABASENAME} (id, flag_scammer, username, discriminator, added, updated, add_reason) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                      timeout: 10000, // 10s
+                      values: [id, "true", username, discriminator, added, updated, add_reason],
+                    },
+                    async function (err, result, fields) {
+                        if (err) return;
+                        if (Object.values(result).length == 0)
+                        {
+                            return console.log(`Unable to add ${id} to DB!`);
+                        }
+                        else
+                        {
+                            return console.log(`Added ${username} DB!`);
+                        }
+                    })
+            });
+        })
 }
 
 module.exports = async (client) => {
