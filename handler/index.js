@@ -18,29 +18,24 @@ async function getPotentialScammersID()
             }
         })
         .then(response => {
-            const scamids = response.data
-            const username = response.data.username
-            const discriminator = response.data.discriminator
-            const added = response.data.added
-            const updated = response.data.updated
-            const add_reason = response.data.add_reason
-            scamids.forEach(id => {
-                if(response.data.bot == 1) return
+            const all = response.data.data
+            all.forEach(user => {
+                if(user.bot == 1) return
                 con.query(
                     {
                       sql: `INSERT INTO ${process.env.DB_DATABASENAME} (id, flag_scammer, username, discriminator, added, updated, add_reason) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                       timeout: 10000, // 10s
-                      values: [id, "true", username, discriminator, added, updated, add_reason],
+                      values: [user.id, "true", user.username, user.discriminator, user.added, user.updated, user.add_reason],
                     },
                     async function (err, result, fields) {
                         if (err) return;
                         if (Object.values(result).length == 0)
                         {
-                            return console.log(`Unable to add ${id} to DB!`);
+                            return console.log(`Unable to add ${user.id} to DB!`);
                         }
                         else
                         {
-                            return console.log(`Added ${username} DB!`);
+                            return console.log(`Added ${user.username} DB!`);
                         }
                     })
             });
@@ -67,8 +62,8 @@ module.exports = async (client) => {
         console.log(`Currently in ${client.guilds.cache.size} ${client.guilds.cache.size == 1 ? "Server" : "Servers"}`);
         // const f = await client.application.commands.fetch()
         // f.forEach(cmd => cmd.delete())
-        // await client.application.commands.set(ArrayOfApplicationCommands); // if you want to update every guild the server is in (up to 1 hour for the update to complete)
-        await client.guilds.cache.get("850690156582273054").commands.set(ArrayOfApplicationCommands); // if you want to update only one guild (instant update)
+        await client.application.commands.set(ArrayOfApplicationCommands); // if you want to update every guild the server is in (up to 1 hour for the update to complete)
+        // await client.guilds.cache.get("850690156582273054").commands.set(ArrayOfApplicationCommands); // if you want to update only one guild (instant update)
         console.log("Commands Loaded!")
 
         try 
