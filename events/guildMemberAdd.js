@@ -24,7 +24,6 @@ client.on("guildMemberAdd", async (member) => {
             }
             else if(result[0].flag_scammer === "true")
             {
-                const flag_scammer = result[0].flag_scammer
                 con.query(
                 {
                   sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
@@ -37,35 +36,145 @@ client.on("guildMemberAdd", async (member) => {
                     {
                         // nothing
                     }
-                    else if(flag_scammer === "true")
+                    else
                     {
                         try
                         {
-                            const guild = await client.guilds.cache.find(g => g.id === "850690156582273054") // Bot Testing Server
-                            const logging = await guild.channels.cache.find(ch => ch.id === "927205569004191784") // Bot Logging Channel
                             const channel = await member.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
 
                             const embed = new Discord.MessageEmbed()
                                 .setColor(colors.Red)
-                                .setDescription(`<@${member.id}> (${member.id}) joined ${member.guild}!`)
+                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Is a Potential Scammer or Bad Actor! \n\n` + "Reason:\n" + "`Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!`")
                                 .setTimestamp()
-                            logging.send({ embeds: [embed]});
+                            await channel.send({ embeds: [embed]}).catch((err) => { console.log (err) });
 
-                            const embed1 = new Discord.MessageEmbed()
+                            const tmp = function(){
+                                if(length.includes("ban"))
+                                {
+                                    return "Banned"
+                                }
+                                else if(length.includes("kick"))
+                                {
+                                    return "Kicked"
+                                }
+                                else if(length != "None")
+                                {
+                                    return "Timeouted for " + length;
+                                }
+                                else
+                                {
+                                    return "ERROR";
+                                }
+                            }
+                            
+                            const timeembed = new Discord.MessageEmbed()
                                 .setColor(colors.Red)
-                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (${member.id}) Is a Potential Scammer or Bad Actor!`)
+                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: Action on <@${member.id}> (ID: ${member.id}) has been taken according to your set up rules! \n\n` + "Action Taken:\n" + tmp())
                                 .setTimestamp()
-                            return channel.send({ embeds: [embed1]}).catch((err) => { console.log (err) });
+
+                            const action = result[0].action_scammer
+
+                            if(action === "60s")
+                            {
+                                await member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
+                                        .setTimestamp()
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                })
+                            }
+                            else if(action == "5min")
+                            {
+                                await member.timeout(5 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
+                                        .setTimestamp()
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                })
+                            }
+                            else if(action == "10min")
+                            {
+                                await member.timeout(10 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
+                                        .setTimestamp()
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                })
+                            }
+                            else if(action == "1h")
+                            {
+                                await member.timeout(60 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
+                                        .setTimestamp()
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                })
+                            }
+                            else if(action == "1d")
+                            {
+                                await member.timeout(60 * 60 * 1000 * 24, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
+                                        .setTimestamp()
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                })
+                            }
+                            else if(action == "1w")
+                            {
+                                await member.timeout(60 * 60 * 1000 * 24 * 7, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor(colors.Red)
+                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
+                                        .setTimestamp()
+                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                })
+                            }
+                            else if(action == "kick")
+                            {
+                                await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                                    try
+                                    {
+                                        const embed = new Discord.MessageEmbed()
+                                            .setColor(colors.Red)
+                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to kick ${message.author}! Please Check my Permissions!`)
+                                            .setTimestamp()
+                                        return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                    }
+                                    catch(err)
+                                    {
+                                        console.log(err)
+                                        //Nothing
+                                    }
+                                })
+                            }
+                            else if(action == "ban")
+                            {
+                                await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => {
+                                    try
+                                    {
+                                        const embed = new Discord.MessageEmbed()
+                                            .setColor(colors.Red)
+                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to ban ${message.author}! Please Check my Permissions!`)
+                                            .setTimestamp()
+                                        return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                    }
+                                    catch(err)
+                                    {
+                                        console.log(err)
+                                        //Nothing
+                                    }
+                                })
+                            }
                         }
                         catch(err)
                         {
-                            console.log(err)
                             // nothing
                         }
-                    }
-                    else
-                    {
-                        // nothing
                     }
                 })
             }
