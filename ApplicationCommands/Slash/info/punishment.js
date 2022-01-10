@@ -103,8 +103,8 @@ module.exports = {
                     {
                         return "None"
                     }
-
                 }
+                
                 let text = `Set ${tmp()} as Punishment for every member that has sent a Phishing link`
                 if(length == "None")
                 {

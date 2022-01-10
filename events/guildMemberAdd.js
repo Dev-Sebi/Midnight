@@ -48,6 +48,30 @@ client.on("guildMemberAdd", async (member) => {
                                 .setTimestamp()
                             await channel.send({ embeds: [embed]}).catch((err) => { console.log (err) });
 
+                            const tmp = function(){
+                                if(length.includes("ban"))
+                                {
+                                    return "Banned"
+                                }
+                                else if(length.includes("kick"))
+                                {
+                                    return "Kicked"
+                                }
+                                else if(length != "None")
+                                {
+                                    return "Timeouted for " + length;
+                                }
+                                else
+                                {
+                                    return "ERROR";
+                                }
+                            }
+                            
+                            const timeembed = new Discord.MessageEmbed()
+                                .setColor(colors.Red)
+                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: Action on <@${member.id}> (ID: ${member.id}) has been taken according to your set up rules! \n\n` + "Action Taken:\n" + tmp())
+                                .setTimestamp()
+
                             const action = result[0].action_scammer
 
                             if(action === "60s")
