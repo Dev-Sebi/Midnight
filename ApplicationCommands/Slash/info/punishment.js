@@ -131,7 +131,7 @@ module.exports = {
                             const channel = await interaction.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
                             const embed = new Discord.MessageEmbed()
                                 .setColor(colors.Blurple)
-                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${interaction.member} Updated the automatic Punishment to ${"`" + tmp() + "`"}`)
+                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${interaction.member} Updated the automatic Punishment for Detected phishing links to ${"`" + tmp() + "`"}`)
                                 .setTimestamp()
                             await channel?.send({ embeds: [embed]}).catch((err) => { });
                         }
