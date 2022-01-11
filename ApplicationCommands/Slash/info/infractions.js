@@ -46,7 +46,7 @@ module.exports = {
                 {
                     const embed = new Discord.MessageEmbed()
                         .setColor(colors.Green)
-                        .setDescription(`${client.emojis.cache.get(emojis.IconBadgeStaff).toString()} ${user.user.username} has **0** global infractions`)
+                        .setDescription(`${client.emojis.cache.get(emojis.IconBadgeStaff).toString()} ${user.user.username} has **0** global infractions and is ${result[0].flag_scammer === "true" ? "" : "not "} marked as a Scammer!`)
 
                     return interaction.reply({embeds: [embed]})
                 }
