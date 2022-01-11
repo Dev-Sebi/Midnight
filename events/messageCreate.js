@@ -23,7 +23,7 @@ client.on("messageCreate", async (message) => {
     const links = messagectn.match(regex)
     const guild = await client.guilds.cache.find(g => g.id === "850690156582273054") // Bot Testing Server
     const logging = await guild.channels.cache.find(ch => ch.id === "925655493416988674") // Bot Logging Channel
-    const protected = ["www.reddit.com", "dankmemer.lol", "help.minecraft.net", "www.instagram.com", "clips.twitch.tv", "open.spotify.com", "twitter.com", "www.twitch.tv", "discord.com", "discord.gg", "media.discordapp.net", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "www.youtube.com", "youtu.be"]
+    const protected = ["www.reddit.com", "dankmemer.lol", "help.minecraft.net", "www.instagram.com", "clips.twitch.tv", "open.spotify.com", "twitter.com", "www.twitch.tv", "discord.com", "discord.gg", "media.discordapp.net", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "youtube.com", "youtu.be"]
 
     if(!links) return;
     links.forEach(hit => {
