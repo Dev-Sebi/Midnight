@@ -45,18 +45,34 @@ module.exports = {
                 if (Object.values(result).length == 0)
                 {
                     const embed = new Discord.MessageEmbed()
-                        .setColor(colors.Green)
-                        .setDescription(`${client.emojis.cache.get(emojis.IconBadgeStaff).toString()} ${user.user.username} has **0** global infractions and is ${result[0].flag_scammer === "true" ? "" : "not "} marked as a Scammer!`)
-
-                    return interaction.reply({embeds: [embed]})
+                        .setTitle(`${client.emojis.cache.get(emojis.IconMod).toString()} Information about ${user.user.username}`)
+                        .setColor(colors.Blurple)
+                        .addFields(
+                            { name: "Infractions:", value: "```0```", inline: true },
+                            { name: "Scammer:", value:  "```Not Indexed!```", inline: true },
+                            { name: "First Seen:", value:  "```Not Indexed!```", inline: false },
+                            { name: "Last Updated:", value:  "```Not Indexed!```", inline: false },
+                            { name: "Add Reason:", value:  "```Not Indexed!```", inline: false },
+                        )
+                        .setTimestamp()
+                        .setFooter(`UserID: ${user.user.id} • Made with heart by Sebi`);
+                    return await interaction.reply({ embeds: [embed]});
                 }
                 else
                 {
                     const embed = new Discord.MessageEmbed()
-                        .setColor(colors.Blurple)
-                        .setDescription(`${client.emojis.cache.get(emojis.IconBadgeStaff).toString()} ${user.user.username} has **${result[0].infractions}** global infractions`)
-
-                    return interaction.reply({embeds: [embed]})
+                        .setTitle(`${client.emojis.cache.get(emojis.IconMod).toString()} Information about ${user.user.username}`)
+                        .setColor((result[0].infractions > 0) ? colors.Red : colors.Blurple)
+                        .addFields(
+                            { name: "Infractions:", value: "```" + result[0].infractions + "```", inline: true },
+                            { name: "Scammer:", value:  "```" + result[0].flag_scammer + "```", inline: true },
+                            { name: "First Seen:", value:  "```" + result[0].added + "```", inline: false },
+                            { name: "Last Updated:", value:  "```" + result[0].updated + "```", inline: false },
+                            { name: "Add Reason:", value:  "```" + result[0].add_reason + "```", inline: false },
+                        )
+                        .setTimestamp()
+                        .setFooter(`UserID: ${user.user.id} • Made with heart by Sebi`);
+                    return await interaction.reply({ embeds: [embed]});
                 }
             }
         )
