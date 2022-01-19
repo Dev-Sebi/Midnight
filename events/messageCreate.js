@@ -221,13 +221,21 @@ client.on("messageCreate", async (message) => {
                                                 }
                                             })
                                         }
-                                        await message.delete().catch((err) => { 
-                                            const embed = new Discord.MessageEmbed()
+                                        else
+                                        {
+                                            await message.delete().catch((err) => { 
+                                                const embed = new Discord.MessageEmbed()
+                                                    .setColor(colors.Red)
+                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take actions againt ${message.author}'s message(s)!`)
+                                                    .setTimestamp()
+                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
+                                            })
+                                            const embed2 = new Discord.MessageEmbed()
                                                 .setColor(colors.Red)
-                                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take actions againt ${message.author}'s message(s)!`)
+                                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} Please do not post any Phising links in <#${message.channel.id}>!\n Links Detected: ` + "`" + links + "`" + `\n\n :warning: if this wasn't you, we advise you to change your Password immediately! Someone might have Access to your Account!`)
                                                 .setTimestamp()
-                                            return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                        })
+                                            return userdm?.send({ embeds: [embed2]}).catch((err) => {});
+                                        }
                                     }
                                 })
                         })
