@@ -43,6 +43,7 @@ module.exports = {
                 { name: "Users:", value:  "```" + users + "```", inline: true },
                 { name: "Average Users per Server:", value:  "```" + averageUsers + "```", inline: true },
                 { name: "Uptime:", value:  "```" + `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds` + "```", inline: true },
+                { name: "Abuse:", value:  "Report Abuse [here](https://discord.gg/zbeg7vrkvN)", inline: false },
             )
             .setTimestamp()
             .setFooter("• Made with heart by Sebi");

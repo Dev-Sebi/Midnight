@@ -73,10 +73,11 @@ client.on("guildMemberAdd", async (member) => {
                                 .setTimestamp()
 
                             const action = result[0].action_scammer
+                            const userdm = member
 
                             if(action === "60s")
                             {
-                                await member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                await member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
@@ -86,7 +87,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "5min")
                             {
-                                await member.timeout(5 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                await member.timeout(5 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
@@ -96,7 +97,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "10min")
                             {
-                                await member.timeout(10 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                await member.timeout(10 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
@@ -106,7 +107,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "1h")
                             {
-                                await member.timeout(60 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                await member.timeout(60 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
@@ -116,7 +117,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "1d")
                             {
-                                await member.timeout(60 * 60 * 1000 * 24, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                await member.timeout(60 * 60 * 1000 * 24, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
@@ -126,7 +127,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "1w")
                             {
-                                await member.timeout(60 * 60 * 1000 * 24 * 7, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).catch((err) => {
+                                await member.timeout(60 * 60 * 1000 * 24 * 7, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     const embed = new Discord.MessageEmbed()
                                         .setColor(colors.Red)
                                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
@@ -136,7 +137,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "kick")
                             {
-                                await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                                await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(userdm.send(`You have been **${tmp()}** from **${guild.name}** for beeing detected as Scam account!`)).catch((err) => { 
                                     try
                                     {
                                         const embed = new Discord.MessageEmbed()
@@ -154,7 +155,7 @@ client.on("guildMemberAdd", async (member) => {
                             }
                             else if(action == "ban")
                             {
-                                await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => {
+                                await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(userdm.send(`You have been **${tmp()}** from **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
                                     try
                                     {
                                         const embed = new Discord.MessageEmbed()
