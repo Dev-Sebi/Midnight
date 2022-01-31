@@ -21,7 +21,7 @@ client.login(process.env.TOKEN);
 
 const express = require('express')
 const app = express()
-const port = 1000
+const port = 1025
 
 app.get('/stats', (req, res) => {
   
