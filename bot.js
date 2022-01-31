@@ -17,3 +17,28 @@ client.ArrayOfApplicationCommands = new Discord.Collection();
 require("./handler")(client);
 
 client.login(process.env.TOKEN);
+
+
+const express = require('express')
+const app = express()
+const port = 1000
+
+app.get('/stats', (req, res) => {
+  
+  const format = `de`
+  const servers = new Intl.NumberFormat(format).format(client.guilds.cache.size)
+  const users = new Intl.NumberFormat(format).format(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0))
+  const averageUsers = new Intl.NumberFormat(format).format(((client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)) / client.guilds.cache.size).toFixed(0))
+  
+  const json = {
+    bot: client.user.username,
+    servers: servers,
+    users: users,
+    averageUsers: averageUsers,
+  }
+  res.send(json)
+})
+
+app.listen(port, () => {
+  console.log(`API launched on port ${port}`)
+})
