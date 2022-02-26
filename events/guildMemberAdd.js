@@ -26,7 +26,7 @@ client.on("guildMemberAdd", async (member) => {
 
             con.query(
                 {
-                  sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=`,
+                  sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
                   timeout: 10000, // 10s
                   values: [member.guild.id],
                 },
