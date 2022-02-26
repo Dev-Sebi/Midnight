@@ -4,8 +4,6 @@ const client = require("../bot.js");
 const con = require("../database/connection");
 const colors = require("../utils/colors.js");
 const emojis = require("../utils/emojis.js");
-const { glob } = require("glob");
-const { promisify } = require("util");
 
 
 client.on("guildMemberAdd", async (member) => {
@@ -20,11 +18,13 @@ client.on("guildMemberAdd", async (member) => {
             if (err) throw err;
             if (Object.values(result).length == 0)
             {
+                return;
                 // nothing
             }
-            else if(result[0].flag_scammer === "true")
-            {
-                con.query(
+
+            const scammer = result[0].flag_scammer
+
+            con.query(
                 {
                   sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
                   timeout: 10000, // 10s
@@ -34,155 +34,57 @@ client.on("guildMemberAdd", async (member) => {
                     if (err) throw err;
                     if (Object.values(result).length == 0)
                     {
+                        return;
                         // nothing
                     }
-                    else
+                    else if(scammer === "false") return;
+                    else if(scammer === "true")
                     {
-                        try
+                        let action = ""
+                        const channel = await member.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
+                        const badActorNoSetup = new Discord.MessageEmbed()
+                            .setColor(colors.Red)
+                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Is a Potential Scammer or Bad Actor! \n\n` + "Reason:\n" + "`Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!`")
+                            .setTimestamp()
+
+                        const badActorSetupKick = new Discord.MessageEmbed()
+                            .setColor(colors.Green)
+                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Was Kicked! \n\n` + "Reason:\n" + "`Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!`")
+                            .setTimestamp()
+
+                        const badActorSetupBan = new Discord.MessageEmbed()
+                            .setColor(colors.Green)
+                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Was Banned! \n\n` + "Reason:\n" + "`Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!`")
+                            .setTimestamp()
+
+                        const noPermissions = new Discord.MessageEmbed()
+                            .setColor(colors.Red)
+                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${message.author}! Please Check my Permissions!`)
+                            .setTimestamp()
+
+
+                        if(result[0].action_scammer === "kick") { action = "kick" }
+                        else if(result[0].action_scammer === "ban") { action = "ban" }
+                        else { return await channel.send({ embeds: [badActorNoSetup]}).catch((err) => { console.log (err) }); }
+
+                        if(action === "kick")
                         {
-                            const channel = await member.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
-
-                            const embed = new Discord.MessageEmbed()
-                                .setColor(colors.Red)
-                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Is a Potential Scammer or Bad Actor! \n\n` + "Reason:\n" + "`Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!`")
-                                .setTimestamp()
-                            await channel.send({ embeds: [embed]}).catch((err) => { console.log (err) });
-
-                            const tmp = function(){
-                                if(length.includes("ban"))
-                                {
-                                    return "Banned"
-                                }
-                                else if(length.includes("kick"))
-                                {
-                                    return "Kicked"
-                                }
-                                else if(length != "None")
-                                {
-                                    return "Timeouted for " + length;
-                                }
-                                else
-                                {
-                                    return "ERROR";
-                                }
-                            }
-                            
-                            const timeembed = new Discord.MessageEmbed()
-                                .setColor(colors.Red)
-                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: Action on <@${member.id}> (ID: ${member.id}) has been taken according to your set up rules! \n\n` + "Action Taken:\n" + tmp())
-                                .setTimestamp()
-
-                            const action = result[0].action_scammer
-                            const userdm = member
-
-                            if(action === "60s")
-                            {
-                                await member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    const embed = new Discord.MessageEmbed()
-                                        .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                        .setTimestamp()
-                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                })
-                            }
-                            else if(action == "5min")
-                            {
-                                await member.timeout(5 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    const embed = new Discord.MessageEmbed()
-                                        .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                        .setTimestamp()
-                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                })
-                            }
-                            else if(action == "10min")
-                            {
-                                await member.timeout(10 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    const embed = new Discord.MessageEmbed()
-                                        .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                        .setTimestamp()
-                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                })
-                            }
-                            else if(action == "1h")
-                            {
-                                await member.timeout(60 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    const embed = new Discord.MessageEmbed()
-                                        .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                        .setTimestamp()
-                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                })
-                            }
-                            else if(action == "1d")
-                            {
-                                await member.timeout(60 * 60 * 1000 * 24, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    const embed = new Discord.MessageEmbed()
-                                        .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                        .setTimestamp()
-                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                })
-                            }
-                            else if(action == "1w")
-                            {
-                                await member.timeout(60 * 60 * 1000 * 24 * 7, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **${tmp()}** in **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    const embed = new Discord.MessageEmbed()
-                                        .setColor(colors.Red)
-                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                        .setTimestamp()
-                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                })
-                            }
-                            else if(action == "kick")
-                            {
-                                await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(userdm.send(`You have been **${tmp()}** from **${guild.name}** for beeing detected as Scam account!`)).catch((err) => { 
-                                    try
-                                    {
-                                        const embed = new Discord.MessageEmbed()
-                                            .setColor(colors.Red)
-                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to kick ${message.author}! Please Check my Permissions!`)
-                                            .setTimestamp()
-                                        return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                    }
-                                    catch(err)
-                                    {
-                                        console.log(err)
-                                        //Nothing
-                                    }
-                                })
-                            }
-                            else if(action == "ban")
-                            {
-                                await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(userdm.send(`You have been **${tmp()}** from **${guild.name}** for beeing detected as Scam account!`)).catch((err) => {
-                                    try
-                                    {
-                                        const embed = new Discord.MessageEmbed()
-                                            .setColor(colors.Red)
-                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to ban ${message.author}! Please Check my Permissions!`)
-                                            .setTimestamp()
-                                        return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                    }
-                                    catch(err)
-                                    {
-                                        console.log(err)
-                                        //Nothing
-                                    }
-                                })
-                            }
+                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                                return channel.send({ embeds: [noPermissions]}).catch((err) => {});
+                            })
+                            return userdm.send(`You have been **kicked** from **${guild.name}** for beeing detected as Scam account!`)
                         }
-                        catch(err)
+
+                        if(action === "ban")
                         {
-                            // nothing
+                            await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                                return channel.send({ embeds: [noPermissions]}).catch((err) => {});
+                            })
+                            return userdm.send(`You have been **banned** from **${guild.name}** for beeing detected as Scam account!`)
                         }
+
                     }
-                })
-            }
-            else
-            {
-                // nothing
-            }
+                }
+            )
         })
-
 })
