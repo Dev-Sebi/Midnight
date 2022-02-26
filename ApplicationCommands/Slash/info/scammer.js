@@ -77,7 +77,7 @@ module.exports = {
                                 .setColor(colors.Blurple)
                                 .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${interaction.member} Updated the automatic Punishment for Scammers or bad actors to ${"`" + punishment + "`"}`)
                                 .setTimestamp()
-                            await channel?.send({ embeds: [embed] }).catch((err) => { });
+                            await channel.send({ embeds: [embed] }).catch((err) => { });
                         }
                     })
             })

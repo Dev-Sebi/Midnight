@@ -26,7 +26,7 @@ client.on("guildMemberAdd", async (member) => {
 
             con.query(
                 {
-                  sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
+                  sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=`,
                   timeout: 10000, // 10s
                   values: [member.guild.id],
                 },
@@ -37,11 +37,12 @@ client.on("guildMemberAdd", async (member) => {
                         return;
                         // nothing
                     }
-                    else if(scammer === "false") return;
+                    if(scammer === "false") return;
                     else if(scammer === "true")
                     {
                         let action = ""
                         const channel = await member.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
+
                         const badActorNoSetup = new Discord.MessageEmbed()
                             .setColor(colors.Red)
                             .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} :warning: <@${member.id}> (ID: ${member.id}) Is a Potential Scammer or Bad Actor! \n\n` + "Reason:\n" + "`Was found to be active in a server that provides Discord Token Grabber (Discord Account Stealer) Malware!`")
@@ -59,30 +60,33 @@ client.on("guildMemberAdd", async (member) => {
 
                         const noPermissions = new Discord.MessageEmbed()
                             .setColor(colors.Red)
-                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${message.author}! Please Check my Permissions!`)
+                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${member.name}! Please Check my Permissions!`)
                             .setTimestamp()
 
 
                         if(result[0].action_scammer === "kick") { action = "kick" }
                         else if(result[0].action_scammer === "ban") { action = "ban" }
-                        else { return await channel.send({ embeds: [badActorNoSetup]}).catch((err) => { console.log (err) }); }
+                        else { return await channel?.send({ embeds: [badActorNoSetup]}); }
 
                         if(action === "kick")
                         {
+                            console.log("kick")
                             await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
-                                return channel.send({ embeds: [noPermissions]}).catch((err) => {});
+                                return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
                             })
+                            await channel.send({ embeds: [badActorSetupKick] }).catch((err) => { });
                             return userdm.send(`You have been **kicked** from **${guild.name}** for beeing detected as Scam account!`)
                         }
 
                         if(action === "ban")
                         {
+                            console.log("ban")
                             await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
-                                return channel.send({ embeds: [noPermissions]}).catch((err) => {});
+                                return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
                             })
+                            await channel.send({ embeds: [badActorSetupBan] }).catch((err) => { });
                             return userdm.send(`You have been **banned** from **${guild.name}** for beeing detected as Scam account!`)
                         }
-
                     }
                 }
             )
