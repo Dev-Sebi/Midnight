@@ -73,7 +73,7 @@ client.on("guildMemberAdd", async (member) => {
                         {
                             await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(channel?.send({ embeds: [badActorSetupKick] })).catch((err) => { 
                                 return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
-                            }).then(userdm.send(`You have been **kicked** from **${member.guild.name}** for being detected as Scam account!`))
+                            }).then(userdm.send(`You have been **kicked** from **${member.guild.name}** for being detected as a Scam account!`))
                             return;
                         }
 
@@ -81,7 +81,7 @@ client.on("guildMemberAdd", async (member) => {
                         {
                             await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(channel?.send({ embeds: [badActorSetupBan] })).catch((err) => { 
                                 return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
-                            }).then(userdm.send(`You have been **banned** from **${member.guild.name}** for being detected as Scam account!`))
+                            }).then(userdm.send(`You have been **banned** from **${member.guild.name}** for being detected as a Scam account!`))
                             return;
                         }
                     }
