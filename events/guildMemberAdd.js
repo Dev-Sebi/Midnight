@@ -42,6 +42,7 @@ client.on("guildMemberAdd", async (member) => {
                     {
                         let action = ""
                         const channel = await member.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
+                        const userdm = member
 
                         const badActorNoSetup = new Discord.MessageEmbed()
                             .setColor(colors.Red)
@@ -60,7 +61,7 @@ client.on("guildMemberAdd", async (member) => {
 
                         const noPermissions = new Discord.MessageEmbed()
                             .setColor(colors.Red)
-                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${member.name}! Please Check my Permissions!`)
+                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${member.user.username}! Please Check my Permissions!`)
                             .setTimestamp()
 
 
@@ -70,22 +71,18 @@ client.on("guildMemberAdd", async (member) => {
 
                         if(action === "kick")
                         {
-                            console.log("kick")
-                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(channel?.send({ embeds: [badActorSetupKick] })).catch((err) => { 
                                 return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
-                            })
-                            await channel.send({ embeds: [badActorSetupKick] }).catch((err) => { });
-                            return userdm.send(`You have been **kicked** from **${guild.name}** for beeing detected as Scam account!`)
+                            }).then(userdm.send(`You have been **kicked** from **${guild.name}** for beeing detected as Scam account!`))
+                            return;
                         }
 
-                        if(action === "ban")
+                        else if(action === "ban")
                         {
-                            console.log("ban")
-                            await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(channel?.send({ embeds: [badActorSetupBan] })).catch((err) => { 
                                 return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
-                            })
-                            await channel.send({ embeds: [badActorSetupBan] }).catch((err) => { });
-                            return userdm.send(`You have been **banned** from **${guild.name}** for beeing detected as Scam account!`)
+                            }).then(userdm.send(`You have been **banned** from **${guild.name}** for beeing detected as Scam account!`))
+                            return;
                         }
                     }
                 }
