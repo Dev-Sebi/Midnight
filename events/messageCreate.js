@@ -112,9 +112,10 @@ client.on("messageCreate", async (message) => {
                                     else
                                     {
                                         const tmout = function(){
-                                            if(result[0].action_scammer !== "None" && scammer === "true")
+                                            if(result[0].action_scammer !== "None")
                                             {
-                                                return result[0].action_scammer
+                                                if(scammer === "true") { return result[0].action_scammer }
+                                                else { return result[0].punishment }
                                             }
                                             else
                                             {
@@ -148,7 +149,7 @@ client.on("messageCreate", async (message) => {
                                         else if(tmout() === "1w") { timeout = 60 * 60 * 1000 * 24 * 7 }
                                         else if(tmout() === "kick") { timeout = "kick" }
                                         else if(tmout() === "ban") { timeout = "ban" }
-
+                                        else { return }
 
                                         if(typeof timeout === "number")
                                         {
