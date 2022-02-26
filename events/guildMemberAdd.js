@@ -79,7 +79,7 @@ client.on("guildMemberAdd", async (member) => {
 
                         else if(action === "ban")
                         {
-                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(channel?.send({ embeds: [badActorSetupBan] })).catch((err) => { 
+                            await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(channel?.send({ embeds: [badActorSetupBan] })).catch((err) => { 
                                 return channel?.send({ embeds: [noPermissions]}).catch((err) => {});
                             }).then(userdm.send(`You have been **banned** from **${member.guild.name}** for beeing detected as Scam account!`))
                             return;
