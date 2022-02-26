@@ -52,6 +52,15 @@ client.on("messageCreate", async (message) => {
                 }
                 else
                 {
+                    const userdm = message.author
+                    const dmPhishingWarning = new Discord.MessageEmbed()
+                        .setColor(colors.Red)
+                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} Please do not post any Phising links in <#${message.channel.id}>!\n Links Detected: ` + "`" + links + "`" + `\n\n :warning: if this wasn't you, we advise you to change your Password immediately! Someone might have Access to your Account!`)
+                        .setTimestamp()
+                    
+                    message.delete();
+                    userdm.send({ embeds: [dmPhishingWarning]}).catch((err) => {});
+
                     let scammer
                     con.query(
                         {
@@ -75,7 +84,6 @@ client.on("messageCreate", async (message) => {
                             }
                             else 
                             {
-                                scammer = result[0].flag_scammer
                                 let infractions = result[0].infractions + 1
                                 con.query(
                                     {
@@ -87,6 +95,7 @@ client.on("messageCreate", async (message) => {
                                         if (err) throw err;
                                 });
                             }
+                            scammer = result[0].flag_scammer || "false"
 
                             con.query(
                                 {
@@ -112,127 +121,61 @@ client.on("messageCreate", async (message) => {
                                                 return result[0].punishment
                                             }
                                         }
-                                        const channel = await message.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
+
+                                        let timeout = 0;
+                                        const channel = message.guild.channels.cache.find(ch => ch.id === result[0].logchannel)
                                         const timeembed = new Discord.MessageEmbed()
                                             .setColor(colors.Red)
                                             .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} ${message.author} posted one or more malicious links! \n\n ||${links.toString().replace(",", "\n")}||`)
                                             .setFooter(`Timeouted them for ${tmout()}!`)
                                             .setTimestamp()
-                                        const userdm = message.author
-                                        if(tmout() == "60s")
-                                        {
-                                            await member.timeout(60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)).catch((err) => {
-                                                const embed = new Discord.MessageEmbed()
-                                                    .setColor(colors.Red)
-                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                                    .setTimestamp()
-                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                             })
-                                        }
-            
-                                        else if(tmout() == "5min")
-                                        {
-                                            await member.timeout(5 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)).catch((err) => {
-                                                const embed = new Discord.MessageEmbed()
-                                                    .setColor(colors.Red)
-                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                                    .setTimestamp()
-                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                            })
-                                        }
-            
-                                        else if(tmout() == "10min")
-                                        {
-                                            await member.timeout(10 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)).catch((err) => {
-                                                const embed = new Discord.MessageEmbed()
-                                                    .setColor(colors.Red)
-                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                                    .setTimestamp()
-                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                            })
-                                        }
-            
-                                        else if(tmout() == "1h")
-                                        {
-                                            await member.timeout(60 * 60 * 1000, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)).catch((err) => {
-                                                const embed = new Discord.MessageEmbed()
-                                                    .setColor(colors.Red)
-                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                                    .setTimestamp()
-                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                            })
-                                        }
-            
-                                        else if(tmout() == "1d")
-                                        {
-                                            await member.timeout(60 * 60 * 1000 * 24, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)).catch((err) => {
-                                                const embed = new Discord.MessageEmbed()
-                                                    .setColor(colors.Red)
-                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                                    .setTimestamp()
-                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                            })
-                                        }
-            
-                                        else if(tmout() == "1w")
-                                        {
-                                            await member.timeout(60 * 60 * 1000 * 24 * 7, 'Midnight Auto Moderation - Phish Link or Scammer Detected').then(channel.send({ embeds: [timeembed]})).then(userdm.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)).catch((err) => {
-                                                const embed = new Discord.MessageEmbed()
-                                                    .setColor(colors.Red)
-                                                    .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
-                                                    .setTimestamp()
-                                                return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                            })
-                                            
-                                        }
-                                        else if(tmout() == "kick")
-                                        {
-                                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(userdm.send(`You have been **Kicked** in **${message.guild.name}** for sending a Phishing Link!`)).catch((err) => { 
-                                                try
-                                                {
-                                                    const embed = new Discord.MessageEmbed()
-                                                        .setColor(colors.Red)
-                                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to kick ${message.author}! Please Check my Permissions!`)
-                                                        .setTimestamp()
-                                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                                }
-                                                catch(err)
-                                                {
-                                                    console.log(err)
-                                                    //Nothing
-                                                }
-                                            })
-                                        }
-                                        else if(tmout() == "ban")
-                                        {
-                                            await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).then(userdm.send(`You have been **Banned** from **${message.guild.name}** for sending a Phishing Link!`)).catch((err) => {
-                                                try
-                                                {
-                                                    const embed = new Discord.MessageEmbed()
-                                                        .setColor(colors.Red)
-                                                        .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to ban ${message.author}! Please Check my Permissions!`)
-                                                        .setTimestamp()
-                                                    return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                                }
-                                                catch(err)
-                                                {
-                                                    console.log(err)
-                                                    //Nothing
-                                                }
-                                            })
-                                        }
-                                        await message.delete().catch((err) => { 
-                                            const embed = new Discord.MessageEmbed()
-                                                .setColor(colors.Red)
-                                                .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take actions againt ${message.author}'s message(s)!`)
-                                                .setTimestamp()
-                                            return channel?.send({ embeds: [embed]}).catch((err) => {});
-                                        })
-                                        const embed2 = new Discord.MessageEmbed()
+
+                                        const failTimeout = new Discord.MessageEmbed()
                                             .setColor(colors.Red)
-                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} Please do not post any Phising links in <#${message.channel.id}>!\n Links Detected: ` + "`" + links + "`" + `\n\n :warning: if this wasn't you, we advise you to change your Password immediately! Someone might have Access to your Account!`)
+                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to timeout ${message.author}! Please Check my Permissions!`)
                                             .setTimestamp()
-                                        return userdm?.send({ embeds: [embed2]}).catch((err) => {});
+
+                                        const failAction = new Discord.MessageEmbed()
+                                            .setColor(colors.Red)
+                                            .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${message.author}! Please Check my Permissions!`)
+                                            .setTimestamp()
+
+                                        if(tmout() === "60s") { timeout = 60 * 1000 }
+                                        else if(tmout() === "5min") { timeout = 5 * 60 * 1000 }
+                                        else if(tmout() === "10min") { timeout =  10 * 60 * 1000}
+                                        else if(tmout() === "1h") { timeout =  60 * 60 * 1000}
+                                        else if(tmout() === "1d") { timeout =  60 * 60 * 1000 * 24}
+                                        else if(tmout() === "1w") { timeout = 60 * 60 * 1000 * 24 * 7 }
+                                        else if(tmout() === "kick") { timeout = "kick" }
+                                        else if(tmout() === "ban") { timeout = "ban" }
+
+
+                                        if(typeof timeout === "number")
+                                        {
+                                            await member.timeout(timeout, 'Midnight Auto Moderation - Phish Link or Scammer Detected').catch(err => {
+                                                return channel?.send({ embeds: [failTimeout]}).catch((err) => {});
+                                            })
+                                            channel.send({ embeds: [timeembed]}).catch((err) => {
+                                                return channel?.send({ embeds: [failTimeout]}).catch((err) => {});
+                                            })
+                                            userdm?.send(`You have been **Timeouted for ${tmout()}** in **${message.guild.name}** for sending a Phishing Link`)
+                                        }
+
+                                        else if(timeout === "kick")
+                                        {
+                                            await member.kick({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                                                    return channel?.send({ embeds: [failAction]}).catch((err) => {});
+                                            })
+                                            await userdm?.send(`You have been **Kicked** in **${message.guild.name}** for sending a Phishing Link!`)
+                                        }
+
+                                        else if(timeout === "ban")
+                                        {
+                                            await member.ban({reason: 'Midnight Auto Moderation - Phish Link or Scammer Detected' }).catch((err) => { 
+                                                    return channel?.send({ embeds: [failAction]}).catch((err) => {});
+                                            })
+                                            await userdm?.send(`You have been **Banned** in **${message.guild.name}** for sending a Phishing Link!`)
+                                        }
                                     }
                                 })
                         })

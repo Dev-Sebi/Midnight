@@ -28,7 +28,6 @@ module.exports = {
      */
     
     execute: async (client, interaction, args) => {
-        
         const userid = await interaction.options._hoistedOptions[0].user.id
         const user = await interaction.guild.members.fetch(userid).catch( (error) => {
             console.log(error)
@@ -76,5 +75,5 @@ module.exports = {
                 }
             }
         )
-    },
-};
+    }
+}
