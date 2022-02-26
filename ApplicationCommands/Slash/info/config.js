@@ -34,7 +34,7 @@ module.exports = {
                 const scammerAction = result[0].action_scammer || "None"
                 const punishment = result[0].punishment || "None"
                 const embed = new Discord.MessageEmbed()
-                    .setTitle(`${client.emojis.cache.get(emojis.IconMod).toString()} Information about ${user.user.username}`)
+                    .setTitle(`${client.emojis.cache.get(emojis.IconMod).toString()} Information about ${interaction.guild.name}`)
                     .setColor(colors.Blurple)
                     .addFields(
                         { name: "Logchannel:", value: `${logchannel} (#${logchannel.name})`, inline: true },
