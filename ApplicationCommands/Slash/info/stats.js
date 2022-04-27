@@ -31,7 +31,7 @@ module.exports = {
         let seconds = Math.floor(totalSeconds % 60);
 
         const url = process.env.PhishSize
-        const responseSize = parseInt(await (await fetch(url)).text());
+        const responseSize = await (await fetch(url)).text();
 
         const format = `en-US`
         const servers = new Intl.NumberFormat(format).format(client.guilds.cache.size)
