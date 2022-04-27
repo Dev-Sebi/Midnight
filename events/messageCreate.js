@@ -26,9 +26,11 @@ client.on("messageCreate", async (message) => {
     let links_detected = 0
     let users_punished = 0
     let links_deleted = 0
+    let links_scanned = 0
 
     if(!links) return;
     links.forEach(hit => {
+        links_scanned++
         hit = hit.replace(/(^\w+:|^)\/\//, '').split('/')[0].toLowerCase();
         if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
@@ -162,12 +164,13 @@ client.on("messageCreate", async (message) => {
                                                 {
                                                     links_detected = (parseInt(result[0].links_detected) + links_detected).toString()
                                                     links_deleted = (parseInt(result[0].links_deleted) + links_deleted).toString()
+                                                    links_scanned = (parseInt(result[0].links_scanned) + links_scanned).toString()
     
                                                     con.query(
                                                         {
-                                                          sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_detected = ?, links_deleted = ? WHERE id = ?`,
+                                                          sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned = ?, links_detected = ?, links_deleted = ? WHERE id = ?`,
                                                           timeout: 10000, // 10s
-                                                          values: [links_detected, links_deleted, message.guild.id],
+                                                          values: [links_scanned, links_detected, links_deleted, message.guild.id],
                                                         },
                                                         async function (err, result, fields) {
                                                             if (err) throw err;
