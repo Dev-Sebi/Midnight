@@ -51,8 +51,16 @@ client.on("messageCreate", async (message) => {
                 logging.send({ embeds: [embed]});
                 if(!scam)
                 {
+                    con.query(
+                        {
+                            sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned=? WHERE id=?`,
+                            timeout: 10000, // 10s
+                            values: [links_scanned.toString(), message.guild.id],
+                        },
+                        async function (err) {
+                            if (err) throw err;
+                    });
                     return;
-                    //nothing, search for other links
                 }
                 else
                 {
