@@ -53,9 +53,9 @@ client.on("messageCreate", async (message) => {
                 {
                     con.query(
                         {
-                          sql: `SELECT * FROM ${process.env.DB_DATABASENAME} WHERE id=?`,
+                          sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
                           timeout: 10000, // 10s
-                          values: [message.author.id],
+                          values: [message.guild.id],
                         },
                         async function (err, result, fields) {
                             if (err) throw err;
