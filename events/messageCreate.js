@@ -9,12 +9,11 @@ const { promisify } = require("util");
 const axios = require('axios');
 const wait = require('util').promisify(setTimeout);
 
-var url = process.env.PhishLink;
+let url = process.env.PhishLink;
 
 client.on("messageCreate", async (message) => {
 
     if(message.system) return;
-   
     
     // message all in lowercase
     const messagectn = message.content.toLowerCase()
@@ -24,9 +23,14 @@ client.on("messageCreate", async (message) => {
     const guild = await client.guilds.cache.find(g => g.id === "850690156582273054") // Bot Testing Server
     const logging = await guild.channels.cache.find(ch => ch.id === "925655493416988674") // Bot Logging Channel
     const protected = ["www.reddit.com", "dankmemer.lol", "help.minecraft.net", "www.instagram.com", "clips.twitch.tv", "open.spotify.com", "twitter.com", "www.twitch.tv", "discord.com", "discord.gg", "media.discordapp.net", "cdn.discord.com", "cdn.discordapp.com", "tenor.com", "github.com", "youtube.com", "youtu.be"]
+    let links_detected = 0
+    let users_punished = 0
+    let links_deleted = 0
+    let links_scanned = 0
 
     if(!links) return;
     links.forEach(hit => {
+        links_scanned++
         hit = hit.replace(/(^\w+:|^)\/\//, '').split('/')[0].toLowerCase();
         if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
@@ -52,13 +56,16 @@ client.on("messageCreate", async (message) => {
                 }
                 else
                 {
+                    links_detected++
                     const userdm = message.author
                     const dmPhishingWarning = new Discord.MessageEmbed()
                         .setColor(colors.Red)
                         .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} Please do not post any Phising links in <#${message.channel.id}>!\n Links Detected: ` + "`" + links + "`" + `\n\n :warning: if this wasn't you, we advise you to change your Password immediately! Someone might have Access to your Account!`)
                         .setTimestamp()
-                    
-                    message.delete();
+
+                    //don't add await here, or bot wont start
+                    message.delete().then(links_deleted++)
+
                     userdm.send({ embeds: [dmPhishingWarning]}).catch((err) => {});
 
                     let scammer
@@ -141,6 +148,37 @@ client.on("messageCreate", async (message) => {
                                             .setDescription(`${client.emojis.cache.get(emojis.IconMod).toString()} I wasn't able to take action against ${message.author}! Please Check my Permissions!`)
                                             .setTimestamp()
 
+                                        con.query(
+                                            {
+                                              sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
+                                              timeout: 10000, // 10s
+                                              values: [message.guild.id],
+                                            },
+                                            async function (err, result, fields) {
+                                                if (err) throw err;
+                                                if (Object.values(result).length == 0)
+                                                {
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    links_detected = (parseInt(result[0].links_detected) + links_detected).toString()
+                                                    links_deleted = (parseInt(result[0].links_deleted) + links_deleted).toString()
+                                                    links_scanned = (parseInt(result[0].links_scanned) + links_scanned).toString()
+    
+                                                    con.query(
+                                                        {
+                                                          sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned = ?, links_detected = ?, links_deleted = ? WHERE id = ?`,
+                                                          timeout: 10000, // 10s
+                                                          values: [links_scanned, links_detected, links_deleted, message.guild.id],
+                                                        },
+                                                        async function (err, result, fields) {
+                                                            if (err) throw err;
+                                                        }
+                                                    )
+                                                }
+                                            })
+
                                         if(tmout() === "60s") { timeout = 60 * 1000 }
                                         else if(tmout() === "5min") { timeout = 5 * 60 * 1000 }
                                         else if(tmout() === "10min") { timeout =  10 * 60 * 1000}
@@ -150,6 +188,9 @@ client.on("messageCreate", async (message) => {
                                         else if(tmout() === "kick") { timeout = "kick" }
                                         else if(tmout() === "ban") { timeout = "ban" }
                                         else { return }
+
+                                        users_punished++
+                                        console.log(users_punished)
 
                                         if(typeof timeout === "number")
                                         {
@@ -177,6 +218,36 @@ client.on("messageCreate", async (message) => {
                                             })
                                             await userdm?.send(`You have been **Banned** in **${message.guild.name}** for sending a Phishing Link!`)
                                         }
+
+                                        con.query(
+                                            {
+                                              sql: `SELECT * FROM ${process.env.DB_DATABASEGUILDS} WHERE id=?`,
+                                              timeout: 10000, // 10s
+                                              values: [message.guild.id],
+                                            },
+                                            async function (err, result, fields) {
+                                                if (err) throw err;
+                                                if (Object.values(result).length == 0)
+                                                {
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    users_punished = (parseInt(result[0].users_punished) + users_punished).toString()
+
+                                                    con.query(
+                                                        {
+                                                          sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET users_punished = ? WHERE id = ?`,
+                                                          timeout: 10000, // 10s
+                                                          values: [users_punished, message.guild.id],
+                                                        },
+                                                        async function (err, result, fields) {
+                                                            if (err) throw err;
+                                                        }
+                                                    )
+                                                }
+                                            })
+                                        
                                     }
                                 })
                         })

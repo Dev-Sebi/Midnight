@@ -30,11 +30,15 @@ module.exports = {
         let minutes = Math.floor(totalSeconds / 60);
         let seconds = Math.floor(totalSeconds % 60);
 
-        const format = `de`
+        const url = process.env.PhishSize
+        const responseSize = await (await fetch(url)).text();
+
+        const format = `en-US`
         const servers = new Intl.NumberFormat(format).format(client.guilds.cache.size)
         const users = new Intl.NumberFormat(format).format(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0))
         const averageUsers = new Intl.NumberFormat(format).format(((client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)) / client.guilds.cache.size).toFixed(0))
-        
+        const dbsize = new Intl.NumberFormat(format).format(responseSize)
+
         const embed = new Discord.MessageEmbed()
             .setTitle(`${client.emojis.cache.get(emojis.IconMod).toString()} Information about ${client.user.username}`)
             .setColor(colors.Blurple)
@@ -42,7 +46,8 @@ module.exports = {
                 { name: "Servers:", value: "```" + servers + "```", inline: true },
                 { name: "Users:", value:  "```" + users + "```", inline: true },
                 { name: "Average Users per Server:", value:  "```" + averageUsers + "```", inline: true },
-                { name: "Uptime:", value:  "```" + `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds` + "```", inline: true },
+                { name: "Phishing Links in Database:", value:  "```" + dbsize + "```", inline: true },
+                { name: "Uptime:", value:  "```" + `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds` + "```", inline: false },
                 { name: "Abuse:", value:  "Report Abuse [here](https://discord.gg/zbeg7vrkvN)", inline: false },
             )
             .setTimestamp()
