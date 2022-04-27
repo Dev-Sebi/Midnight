@@ -65,7 +65,7 @@ client.on("messageCreate", async (message) => {
                             }
                             else
                             {
-                                links_scanned = result[0].links_scanned + links_scanned
+                                links_scanned = parseInt(result[0].links_scanned) + links_scanned
                                 con.query(
                                     {
                                         sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned=? WHERE id=?`,
