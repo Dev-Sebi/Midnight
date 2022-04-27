@@ -53,13 +53,30 @@ client.on("messageCreate", async (message) => {
                 {
                     con.query(
                         {
-                            sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned=? WHERE id=?`,
-                            timeout: 10000, // 10s
-                            values: [links_scanned.toString(), message.guild.id],
+                          sql: `SELECT * FROM ${process.env.DB_DATABASENAME} WHERE id=?`,
+                          timeout: 10000, // 10s
+                          values: [message.author.id],
                         },
-                        async function (err) {
+                        async function (err, result, fields) {
                             if (err) throw err;
-                    });
+                            if (Object.values(result).length == 0)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                links_scanned = result[0].links_scanned + links_scanned
+                                con.query(
+                                    {
+                                        sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned=? WHERE id=?`,
+                                        timeout: 10000, // 10s
+                                        values: [links_scanned.toString(), message.guild.id],
+                                    },
+                                    async function (err) {
+                                        if (err) throw err;
+                                });
+                            }
+                        })
                     return;
                 }
                 else
