@@ -32,7 +32,7 @@ client.on("messageCreate", async (message) => {
     links.forEach(hit => {
         links_scanned++
         hit = hit.replace(/(^\w+:|^)\/\//, '').split('/')[0].toLowerCase();
-        if(protected.includes(hit)) return;
+        // if(protected.includes(hit)) return;
         axios.get(`${url}/${hit}`, {
             headers: {
                 "X-Identity": process.env.PhishIdendity,
