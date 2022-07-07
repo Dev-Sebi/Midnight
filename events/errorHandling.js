@@ -11,7 +11,7 @@ const { glob } = require("glob");
 const { promisify } = require("util");
 
 const id = "924064915940057108"
-const ownerping = "<@280094303429197844> <@283509474772123659>"
+const ownerping = "<@280094303429197844>"
 
 process.on("unhandledRejection", async (reason, p) => {
     const channel = await client.channels.cache.find(ch => ch.id === id)
