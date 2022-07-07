@@ -7,7 +7,6 @@ const colors = require("../../../utils/colors");
 const con = require("../../../database/connection");
 const wait = require('util').promisify(setTimeout);
 const moment = require('moment');
-const { emitKeypressEvents } = require("readline");
 
 module.exports = {
     name: "submit-phish",
