@@ -63,7 +63,7 @@ module.exports = async (client) => {
         // const f = await client.application.commands.fetch()
         // f.forEach(cmd => cmd.delete())
         // await client.application.commands.set(ArrayOfApplicationCommands); // if you want to update every guild the server is in (up to 1 hour for the update to complete)
-        await client.guilds.cache.get("870025103394623528").commands.set(ArrayOfApplicationCommands); // if you want to update only one guild (instant update)
+        await client.guilds.cache.get("850690156582273054").commands.set(ArrayOfApplicationCommands); // if you want to update only one guild (instant update)
         console.log("Commands Loaded!")
 
         try 

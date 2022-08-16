@@ -187,15 +187,15 @@ client.on("messageCreate", async (message) => {
                                                 }
                                                 else
                                                 {
-                                                    links_detected = (parseInt(result[0].links_detected) + links_detected).toString()
-                                                    links_deleted = (parseInt(result[0].links_deleted) + links_deleted).toString()
-                                                    links_scanned = (parseInt(result[0].links_scanned) + links_scanned).toString()
+                                                    links_detected = parseInt(result[0].links_detected) + links_detected
+                                                    links_deleted = parseInt(result[0].links_deleted) + links_deleted
+                                                    links_scanned = parseInt(result[0].links_scanned) + links_scanned
     
                                                     con.query(
                                                         {
                                                           sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET links_scanned = ?, links_detected = ?, links_deleted = ? WHERE id = ?`,
                                                           timeout: 10000, // 10s
-                                                          values: [links_scanned, links_detected, links_deleted, message.guild.id],
+                                                          values: [links_scanned.toString(), links_detected.toString(), links_deleted.toString(), message.guild.id],
                                                         },
                                                         async function (err, result, fields) {
                                                             if (err) throw err;
@@ -258,13 +258,13 @@ client.on("messageCreate", async (message) => {
                                                 }
                                                 else
                                                 {
-                                                    users_punished = (parseInt(result[0].users_punished) + users_punished).toString()
+                                                    users_punished = parseInt(result[0].users_punished) + users_punished
 
                                                     con.query(
                                                         {
                                                           sql: `UPDATE ${process.env.DB_DATABASEGUILDS} SET users_punished = ? WHERE id = ?`,
                                                           timeout: 10000, // 10s
-                                                          values: [users_punished, message.guild.id],
+                                                          values: [users_punished.toString(), message.guild.id],
                                                         },
                                                         async function (err, result, fields) {
                                                             if (err) throw err;
